@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Guardar Informacion</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 5px auto;
+      padding: 0 16px;
+      background-color: rgb(238, 255, 249);
+    }
+    form {
+      padding: 20px;
+      border-radius: 0px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    input, textarea, button {
+      padding: 20px;
+      font-size: 2rem;
+      border-radius: 0px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #1db97d;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0c744c;
+    }
+    .tarjeta {
+      background: #ffffff;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 0px;
+    }
+  </style>
+</head>
+<style>
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<body>
+  <h1 style="color: rgb(85, 41, 10); text-align: center;">Guardar Informacion</h1>
+  <p style="text-align: center;"><b>Si deseas volver al <i>Index</i> de la pagina... Dale click a la flecha!</b></p>
+  <a href="index.html"><img src="https://file.garden/ZnXwEXWZT2iPJ-EE/line.png" alt="Guardar Informacion" width="100" height="100"></marquee></a>
+  
+  <form id="formulario-perfil">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" placeholder="Ej... Mr.Mac Gutierrez" required />
+
+    <label for="informacion">Información:</label>
+    <textarea id="informacion" rows="3" placeholder="Describe tu estado... O nada mas la razon de porque escribes." required></textarea>
+
+    <button type="submit">Guardar información</button>
+  </form>
+
+  <div id="lista-perfiles"></div>
+
+  <script>
+    class PerfilUsuario {
+      constructor(nombre, informacion) {
+        this.nombre = nombre.trim();
+        this.informacion = informacion.trim();
+        this.fechaRegistro = new Date().toLocaleString("es-CO");
+      }
+
+      crearElementoHTML() {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "tarjeta";
+
+        const titulo = document.createElement("h2");
+        titulo.textContent = this.nombre;
+
+        const descripcion = document.createElement("p");
+        descripcion.textContent = this.informacion;
+
+        const fecha = document.createElement("small");
+        fecha.textContent = `Registrado: ${this.fechaRegistro}`;
+
+        tarjeta.append(titulo, descripcion, fecha);
+        return tarjeta;
+      }
+    }
+
+    class GestorPerfiles {
+      constructor(contenedorId) {
+        this.contenedor = document.getElementById(contenedorId);
+        this.perfiles = [];
+      }
+
+      agregarPerfil(perfil) {
+        this.perfiles.push(perfil);
+        this.renderizar();
+      }
+
+      renderizar() {
+        this.contenedor.innerHTML = "";
+        this.perfiles.forEach((perfil) => {
+          this.contenedor.appendChild(perfil.crearElementoHTML());
+        });
+      }
+    }
+
+    const gestor = new GestorPerfiles("lista-perfiles");
+    const formulario = document.getElementById("formulario-perfil");
+
+    formulario.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+
+      const nombreInput = document.getElementById("nombre");
+      const infoInput = document.getElementById("informacion");
+
+      const nuevoPerfil = new PerfilUsuario(nombreInput.value, infoInput.value);
+      gestor.agregarPerfil(nuevoPerfil);
+
+      formulario.reset();
+      nombreInput.focus();
+    });
+  </script>
+</body>
+</html>
